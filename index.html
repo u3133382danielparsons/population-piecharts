@@ -66,8 +66,8 @@
         <div class="container">
             <div class="row">
                 <div id="rowFour" class="col-md-12 text-center">
-                    <h2>Yearly populations - Country &amp; Age.</h2>
-                    <i>From 1950 to <span id="thisyear"></span></i>
+                    <h2>Yearly Populations by Country and Age.</h2>
+                    <i>From 1950 to <span id="currentyear"></span></i>
                     <form id='form'>
                         <div class="input-group mb-3">
                             <select class="custom-select" id="countries">
@@ -286,8 +286,7 @@
                                 <option value="Zimbabwe">Zimbabwe</option>
                             </select>
                             <div class="input-group-append">
-                                <label id="countriesFourlbl" class="input-group-text"
-                                    for="countriesFour">Options</label>
+                                <label id="countrieslbl" class="input-group-text" for="countries">Options</label>
                             </div>
                         </div>
 
@@ -398,17 +397,65 @@
                                 <option value="100">100</option>
                             </select>
                             <div class="input-group-append">
-                                <label id="agesFourlbl" class="input-group-text" for="agesFour">Options</label>
+                                <label id="ageslbl" class="input-group-text" for="ages">Options</label>
                             </div>
                         </div>
-
-                        <button id="btnFour" class='btn btn-primary btn-lg' type='submit'>Submit</button>
+                        <button id="btnpies" class='btn btn-primary btn-lg btn-block' type='submit'></button>
                     </form>
                 </div>
             </div>
             <div id='pie-charts'>
             </div>
             <hr />
+        </div>
+
+        <!-- 5. Population List of all countries. -->
+        <div class="container">
+            <div class="row">
+                <div id="rowFive" class="col-md-12 text-center">
+                    <h2>Population Totals - All Countries.</h2>
+                    <form id='formtwo'>
+                        <button id='btnhbars' class='btn btn-danger btn-lg btn-block' type='submit'>Click Here</button>
+                    </form>
+                    <ul class="list-group list-group-five list-group-flush"></ul>
+                </div>
+            </div>
+            <hr />
+            <!-- Google Chart of Population data from all Countries -->
+            <div id="chart-data">
+                <div id="histogram-a" class="histogram"></div>
+                <div id="bar-a"></div>
+                <div id="histogram-b" class="histogram"></div>
+                <div id="bar-b"></div>
+                <div id="histogram-c" class="histogram"></div>
+                <div id="bar-c"></div>
+                <div id="histogram-d" class="histogram"></div>
+                <div id="bar-d"></div>
+                <div id="histogram-e" class="histogram"></div>
+                <div id="bar-e"></div>
+                <div id="histogram-f" class="histogram"></div>
+                <div id="bar-f"></div>
+                <div id="histogram-g" class="histogram"></div>
+                <div id="bar-g"></div>
+                <div id="histogram-h" class="histogram"></div>
+                <div id="bar-h"></div>
+                <div id="histogram-i" class="histogram"></div>
+                <div id="bar-i"></div>
+                <div id="histogram-j" class="histogram"></div>
+                <div id="bar-j"></div>
+                <div id="histogram-k" class="histogram"></div>
+                <div id="bar-k"></div>
+                <div id="histogram-l" class="histogram"></div>
+                <div id="bar-l"></div>
+                <div id="histogram-m" class="histogram"></div>
+                <div id="bar-m"></div>
+                <div id="histogram-n" class="histogram"></div>
+                <div id="bar-n"></div>
+                <div id="histogram-o" class="histogram"></div>
+                <div id="bar-o"></div>
+                <div id="histogram-p" class="histogram"></div>
+                <div id="bar-p"></div>
+            </div>
         </div>
 
 

@@ -5,14 +5,26 @@
     justify-content: center;
 }
 
-ul, table {
-    margin-top: 1em;
+#pie-charts {
+    margin-top: 55px;
 }
+#pie-charts > * {
+    margin-bottom: 55px;
+    border: solid 1px rgb(139, 139, 145);
+		background-color: #eed;
+		box-shadow:  0 0 10px 5px rgba(31, 34, 43, 0.6);
+		-moz-box-shadow: 0 0 10px  5px rgba(31, 34, 43, 0.6);
+		-webkit-box-shadow: 0 0 10px 5px rgba(31, 34, 43, 0.6);
+		-o-box-shadow: 0 0 10px 5px rgba(31, 34, 43, 0.6);
+}
+/* ul, table {
+    margin-top: 1em;
+} */
 
-.table-bordered thead td, .table-bordered thead th {
+/* .table-bordered thead td, .table-bordered thead th {
     border-bottom-width: 3px;
     font-weight: bolder;
-}
+} */
 
 .copyright-section {
     background-color: #0275d8;
