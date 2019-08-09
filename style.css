@@ -1,0 +1,26 @@
+.container {
+    padding-top: 55px;
+    display: grid;
+    align-items: center;
+    justify-content: center;
+}
+
+ul, table {
+    margin-top: 1em;
+}
+
+.table-bordered thead td, .table-bordered thead th {
+    border-bottom-width: 3px;
+    font-weight: bolder;
+}
+
+.copyright-section {
+    background-color: #0275d8;
+    color: #fff;
+    padding: 34px 5px;
+    margin-top: 34px;
+}
+
+.copyright-section p {
+    margin: 0;
+}
