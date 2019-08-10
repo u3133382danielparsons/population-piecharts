@@ -17,9 +17,9 @@
 		-webkit-box-shadow: 0 0 10px 5px rgba(31, 34, 43, 0.6);
 		-o-box-shadow: 0 0 10px 5px rgba(31, 34, 43, 0.6);
 }
-/* ul, table {
+ul {
     margin-top: 1em;
-} */
+}
 
 /* .table-bordered thead td, .table-bordered thead th {
     border-bottom-width: 3px;

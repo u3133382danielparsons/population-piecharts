@@ -11,31 +11,39 @@ window.onload = function () {
 
     const d = new Date();
     const yyyy = d.getFullYear(); // Current Year
-    // let mm = d.getMonth() + 1;  // Current Month
-    // let dd = d.getDate(); // Current Day of the month
-    // if (dd < 10) { dd = `0${dd}`; }
-    // if (mm < 10) { mm = `0${mm}`; }
-    // const today = `${yyyy}-${mm}-${dd}`;
+    let mm = d.getMonth() + 1;  // Current Month
+    let dd = d.getDate(); // Current Day of the month
+    if (dd < 10) { dd = `0${dd}`; }
+    if (mm < 10) { mm = `0${mm}`; }
+    const today = `${yyyy}-${mm}-${dd}`;
+
+    // Submit buttons for forms
+    const spinspan = document.createElement('span');
+    spinspan.classList.add('spinner-border');
+    spinspan.classList.add('spinner-border-sm');
+    var btnone = document.getElementById('btnone');
+    btnone.innerText = 'Submit';
+    let btntwo = document.getElementById('btntwo');
+    btntwo.innerText = 'Submit';
+    let btnthree = document.getElementById('btnthree');
+    btnthree.innerText = 'Click Here';
 
     /* Yearly Populations by Country and Age */
 
-    let btnpies = document.getElementById('btnpies');
-    btnpies.innerText = 'submit';
+
 
     document.getElementById("currentyear").appendChild(document.createTextNode(yyyy)); // Add current year to subtitle
 
 
-    // Submit form onsubmit
-    const form = document.getElementById('form');
-    form.addEventListener("submit", function (event) {
+    // Submit formone onsubmit
+    const formone = document.getElementById('formone');
+    formone.addEventListener("submit", function (event) {
         console.log('form');
-        // Loading spinner
-        //         <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-        //   Loading...
 
-
-        btnpies.innerText = 'Loading . . .';
-        btnpies.classList.add('disabled');
+        // Add Loading spinner to button
+        btnone.innerText = 'Loading...';
+        btnone.appendChild(spinspan);
+        btnone.classList.add('disabled');
 
         // Input fields
         const countries = document.getElementById("countries");
@@ -46,17 +54,21 @@ window.onload = function () {
         let age = ages.value;
 
         // // Change label text
-        // // Change label text
         document.getElementById('countrieslbl').innerText = 'Country';
         document.getElementById('ageslbl').innerText = 'Age';
 
 
-        // Delete Table
+        // If both select inputs aren't given a value
         if (country == 'Country of Birth' || age == 'Age in Years') {
-            bootbox.alert('Please select both a country and an age.')
+            // if (bootbox.alert('')) { }
+            // window.location.reload();
+
+            bootbox.confirm("Please select both a country and an age!", function (result) {
+                window.location.reload();
+            });
         }
 
-        var k; // Have you read Kafka?
+        // var k; // Have you read Kafka?
 
         // Initialise arrays for pie charts
         var piedata = [];
@@ -74,8 +86,8 @@ window.onload = function () {
         for (y4; y4 >= 1950; y4--) {
 
             // fetch yearly populations for any given country from the population.io api.
-            const url4 = `http://54.72.28.201:80/1.0/population/${y4}/${country}/${age}/?format=json`;
-            fetch(url4)
+            const url1 = `http://54.72.28.201:80/1.0/population/${y4}/${country}/${age}/?format=json`;
+            fetch(url1)
                 .then(response => response.json())
 
                 .then(data => {
@@ -85,12 +97,11 @@ window.onload = function () {
                         totals.push(data[i].total);
                         datayear.push(data[i].year);
 
-                        // console.log(JSON.stringify(data));
                         /* The amount of values in the females and male arrays 
                            are equal to the number of years in the api data */
                         if (females.length == years && males.length == years) {
 
-                            for (k = 0; k <= years - 1; k++) {
+                            for (let k = 0; k <= years - 1; k++) {
 
                                 // Create the array for each year to be passed to each chart
                                 piedata[k] = [].concat([header], [['females', females[k]]], [['males', males[k]]]);
@@ -130,8 +141,8 @@ window.onload = function () {
                                         var chart = new google.visualization.PieChart(document.getElementById(id));
 
                                         chart.draw(data, options);
-                                        btnpies.innerText = 'submit';
-                                        btnpies.classList.remove('disabled');
+                                        btnone.innerText = 'submit';
+                                        btnone.classList.remove('disabled');
                                     }
                                 }
                                 console.log(JSON.stringify(piearray));
@@ -152,16 +163,95 @@ window.onload = function () {
 
     });
 
-    /* Population Totals - All Countries */
+    /* Life Expectancies */
 
-    let btnhbars = document.getElementById('btnhbars');
-    btnhbars.innerText('Click Here');
+
     /* submit form two onsubmit */
     const formtwo = document.getElementById('formtwo');
     formtwo.addEventListener("submit", function (event) {
         console.log('formtwo');
 
+        // Add Loading spinner to button
+        btntwo.innerText = 'Loading...';
+        btntwo.appendChild(spinspan);
+        btntwo.classList.add('disabled');
 
+        const countriestwo = document.getElementById("countriestwo");
+        const agestwo = document.getElementById("agestwo");
+        const monthstwo = document.getElementById("monthstwo");
+        const gendertwo = document.getElementById("gendertwo");
+        const ultwo = document.getElementsByClassName("list-group-two")[0];
+
+        // Change label text
+        document.getElementById('countriestwolbl').innerText = 'Country of Birth';
+        document.getElementById('agestwolbl').innerText = 'Age';
+        document.getElementById('monthstwolbl').innerText = 'Birth Month';
+        document.getElementById('gendertwolbl').innerText = 'Gender';
+
+
+        // Remove list items
+        while (ultwo.firstChild) {
+            ultwo.removeChild(ultwo.firstChild);
+        }
+
+        // Get Values from select option
+        let c2 = countriestwo.value;
+        let a2 = agestwo.value;
+        let m2 = monthstwo.value;
+        const ym2 = `${a2}y${m2}m`;
+        let g2 = gendertwo.value;
+
+
+        if (c2 == 'Country of Birth' || a2 == 'Age in Years' || m2 == 'Month of Birth' || g2 == 'Choose Gender') {
+            bootbox.alert('Please provide a country, an age, a month of Birth, and a gender.');
+        }
+
+        const url2 = `http://54.72.28.201:80/1.0/life-expectancy/remaining/${g2}/${c2}/${today}/${ym2}/`;
+        fetch(url2)
+            .then(response => response.json())
+            .then(data => {
+                for (let i of Object.keys(data)) {
+                    var rle = Math.round(data.remaining_life_expectancy);
+                    var le = parseInt(a2) + rle;
+                }
+                for (let j = 0; j <= 1; j++) {
+                    let litwo = document.createElement("li");
+                    ultwo.appendChild(litwo);
+                    litwo.classList.add("list-group-item");
+
+                    if (j == 0) {
+                        litwo.appendChild(document.createTextNode(`Life Expectancy is ${le} years.`));
+                    } else {
+                        litwo.appendChild(document.createTextNode(`Remaining Life Expectancy is ${rle} years.`));
+                    }
+                }
+                if (c2 == 'Country of Birth' || a2 == 'Age in Years' || m2 == 'Month of Birth' || g2 == 'Choose Gender') {
+                    console.log(ultwo.firstChild);
+                    ultwo.removeChild(ultwo.firstChild);
+                    ultwo.removeChild(ultwo.firstChild);
+                }
+
+                // Renable submit button
+                btntwo.innerText = 'submit';
+                btntwo.classList.remove('disabled');
+            })
+            .catch(error => bootbox.alert("Sorry, something went wrong!"));
+
+        event.preventDefault();
+    });
+
+    /* Population Totals - All Countries */
+
+
+    /* submit form three onsubmit */
+    const formthree = document.getElementById('formthree');
+    formthree.addEventListener("submit", function (event) {
+        console.log('formthree');
+
+        // Add Loading spinner to button
+        btnthree.innerText = 'Loading...';
+        btnthree.appendChild(spinspan);
+        btnthree.classList.add('disabled');
 
         event.preventDefault();
     });
