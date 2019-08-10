@@ -5,18 +5,23 @@
     justify-content: center;
 }
 
-#pie-charts {
+#pieCharts {
     margin-top: 55px;
 }
-#pie-charts > * {
+#pieCharts > *,
+#chartdata > * {
     margin-bottom: 55px;
     border: solid 1px rgb(139, 139, 145);
-		background-color: #eed;
 		box-shadow:  0 0 10px 5px rgba(31, 34, 43, 0.6);
 		-moz-box-shadow: 0 0 10px  5px rgba(31, 34, 43, 0.6);
 		-webkit-box-shadow: 0 0 10px 5px rgba(31, 34, 43, 0.6);
 		-o-box-shadow: 0 0 10px 5px rgba(31, 34, 43, 0.6);
 }
+.barchart {
+    padding-left: 8px;
+    margin-top: 81px;
+}
+
 ul {
     margin-top: 1em;
 }

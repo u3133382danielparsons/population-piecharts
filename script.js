@@ -19,8 +19,8 @@ window.onload = function () {
 
     // Submit buttons for forms
     const spinspan = document.createElement('span');
-    spinspan.classList.add('spinner-border');
-    spinspan.classList.add('spinner-border-sm');
+    spinspan.classList.add('spinner-grow');
+    spinspan.classList.add('ml-3');
     var btnone = document.getElementById('btnone');
     btnone.innerText = 'Submit';
     let btntwo = document.getElementById('btntwo');
@@ -38,7 +38,10 @@ window.onload = function () {
     // Submit formone onsubmit
     const formone = document.getElementById('formone');
     formone.addEventListener("submit", function (event) {
-        console.log('form');
+        var pieCharts = document.getElementById('pieCharts')
+        while (pieCharts.firstChild) {
+            pieCharts.removeChild(pieCharts.firstChild);
+        }
 
         // Add Loading spinner to button
         btnone.innerText = 'Loading...';
@@ -67,8 +70,6 @@ window.onload = function () {
                 window.location.reload();
             });
         }
-
-        // var k; // Have you read Kafka?
 
         // Initialise arrays for pie charts
         var piedata = [];
@@ -109,8 +110,8 @@ window.onload = function () {
 
                                 var pieyear = datayear[k];
 
-                                var listtotal = totals[k];
-                                console.log(listtotal);
+                                // var listtotal = totals[k];
+                                // console.log(listtotal);
 
 
                                 // Create div elements for each pie chart
@@ -118,13 +119,12 @@ window.onload = function () {
 
                                 // Add the newly created div elements with an id into the DOM 
                                 newDiv.setAttribute("id", 'piechart-' + k);
-                                document.getElementById('pie-charts').appendChild(newDiv);
+                                pieCharts.appendChild(newDiv);
 
 
                                 function renderpiecharts(piearray, pieyear) {
 
                                     let id = 'piechart-' + k;
-                                    console.log(pieyear);
                                     google.charts.load('current', { 'packages': ['corechart'] });
                                     google.charts.setOnLoadCallback(drawChart);
 
@@ -169,7 +169,6 @@ window.onload = function () {
     /* submit form two onsubmit */
     const formtwo = document.getElementById('formtwo');
     formtwo.addEventListener("submit", function (event) {
-        console.log('formtwo');
 
         // Add Loading spinner to button
         btntwo.innerText = 'Loading...';
@@ -242,16 +241,304 @@ window.onload = function () {
 
     /* Population Totals - All Countries */
 
+    // Initialise arrays for bar and histogram charts
+
+
+    // Header Info 
+    var headertwo = ['Country', 'Population'];
 
     /* submit form three onsubmit */
     const formthree = document.getElementById('formthree');
     formthree.addEventListener("submit", function (event) {
-        console.log('formthree');
+
 
         // Add Loading spinner to button
         btnthree.innerText = 'Loading...';
         btnthree.appendChild(spinspan);
         btnthree.classList.add('disabled');
+
+        var countriesarray = [];
+        var dataArray = [];
+        let i;
+        for (i = 0; i < countries.length; i++) {
+            countriesarray.push(countries.options[i].value);
+        }
+        countriesarray.splice(0, 2);
+
+        countriesarray.forEach(country => {
+            country = country;
+            const url2 = `http://54.72.28.201:80/1.0/population/${country}/${today}?format=json`;
+            fetch(url2)
+                .then(response => response.json())
+                .then(data => {
+                    for (let i of Object.keys(data)) {
+                        var countryarray = [];
+                        countryarray.push(country.split("%20").join(" "));
+                        countryarray.push(data.total_population.population);
+                        dataArray.push(countryarray);
+
+                        let countrieslength = countries.length - 2;
+                        let datalength = dataArray.length;
+
+                        if (countrieslength == datalength) {
+                            console.log(JSON.stringify(dataArray));
+
+                            // Renable submit button
+                            btnthree.innerText = 'submit';
+                            btnthree.classList.remove('disabled');
+
+                            // Remove Regions from dataArray
+                            var indexRemove;
+                            function findIndex(item) {
+                                for (let i = 0; i < dataArray.length; i++) {
+                                    for (let j = 0; j < 2; j++) {
+                                        if (dataArray[i][j] === item) {
+                                            indexRemove = i;
+                                            dataArray.splice(indexRemove, 1);
+                                        }
+                                    }
+                                }
+                            }
+                            findIndex('World');
+                            findIndex('South America');
+                            findIndex('Sub-Saharan Africa');
+
+                            // Create new charts div elements
+                            function newchartdivs(x) {
+                                var newbarDiv = document.createElement('div');
+                                var newhistoDiv = document.createElement('div');
+                                newbarDiv.setAttribute("id", 'barchart-' + x);
+                                document.getElementById('chartdata').appendChild(newbarDiv);
+                                newbarDiv.classList.add('barchart');
+                                newhistoDiv.setAttribute("id", 'histochart-' + x);
+                                document.getElementById('chartdata').appendChild(newhistoDiv);
+                                newhistoDiv.classList.add('histogram');
+                            }
+
+
+
+                            // Take sliced arrays from dataArray and render charts
+                            var dataArrayLength = dataArray.length;
+
+                            // Create arrays from slicing dataArray
+                            for (var x = 0; x < dataArrayLength; x++) {
+                                if (x == 10) {
+                                    let da1 = dataArray.slice(0, x);
+                                    da1.unshift(headertwo);
+                                    newchartdivs(x);
+                                    rendercharts(da1, x);
+                                    renderhistogram(da1, x);
+
+                                }
+                                if (x == 20) {
+                                    let da2 = dataArray.slice(11, x);
+                                    da2.unshift(headertwo);
+                                    newchartdivs(x);
+                                    rendercharts(da2, x);
+                                    renderhistogram(da2, x)
+                                }
+                                if (x == 30) {
+                                    let da3 = dataArray.slice(21, x);
+                                    da3.unshift(headertwo);
+                                    newchartdivs(x);
+                                    rendercharts(da3, x);
+                                    renderhistogram(da3, x)
+                                }
+                                if (x == 40) {
+                                    let da4 = dataArray.slice(31, x);
+                                    da4.unshift(headertwo);
+                                    newchartdivs(x);
+                                    rendercharts(da4, x);
+                                    renderhistogram(da4, x)
+                                }
+                                if (x == 50) {
+                                    let da5 = dataArray.slice(41, x);
+                                    da5.unshift(headertwo);
+                                    newchartdivs(x);
+                                    rendercharts(da5, x);
+                                    renderhistogram(da5, x)
+                                }
+                                if (x == 60) {
+                                    let da6 = dataArray.slice(51, x);
+                                    da6.unshift(headertwo);
+                                    newchartdivs(x);
+                                    rendercharts(da6, x);
+                                    renderhistogram(da6, x)
+                                }
+                                if (x == 70) {
+                                    let da7 = dataArray.slice(61, x);
+                                    da7.unshift(headertwo);
+                                    newchartdivs(x);
+                                    rendercharts(da7, x);
+                                    renderhistogram(da7, x)
+
+                                }
+                                if (x == 80) {
+                                    let da8 = dataArray.slice(71, x);
+                                    da8.unshift(headertwo);
+                                    newchartdivs(x);
+                                    rendercharts(da8, x);
+                                    renderhistogram(da8, x)
+
+                                }
+                                if (x == 90) {
+                                    let da9 = dataArray.slice(81, x);
+                                    da9.unshift(headertwo);
+                                    newchartdivs(x);
+                                    rendercharts(da9, x);
+                                    renderhistogram(da9, x)
+                                }
+                                if (x == 100) {
+                                    let da10 = dataArray.slice(91, x);
+                                    da10.unshift(headertwo);
+                                    newchartdivs(x);
+                                    rendercharts(da10, x);
+                                    renderhistogram(da10, x)
+
+                                }
+                                if (x == 110) {
+                                    let da11 = dataArray.slice(101, x);
+                                    da11.unshift(headertwo);
+                                    newchartdivs(x);
+                                    rendercharts(da11, x);
+                                    renderhistogram(da11, x)
+
+                                }
+                                if (x == 120) {
+                                    let da12 = dataArray.slice(111, x);
+                                    da12.unshift(headertwo);
+                                    newchartdivs(x);
+                                    rendercharts(da12, x);
+                                    renderhistogram(da12, x)
+
+                                }
+                                if (x == 130) {
+                                    let da13 = dataArray.slice(121, x);
+                                    da13.unshift(headertwo);
+                                    newchartdivs(x);
+                                    rendercharts(da13, x);
+                                    renderhistogram(da13, x)
+
+                                }
+                                if (x == 140) {
+                                    let da14 = dataArray.slice(131, x);
+                                    da14.unshift(headertwo);
+                                    newchartdivs(x);
+                                    rendercharts(da14, x);
+                                    renderhistogram(da14, x)
+
+                                }
+                                if (x == 150) {
+                                    let da15 = dataArray.slice(141, x);
+                                    da15.unshift(headertwo);
+                                    newchartdivs(x);
+                                    rendercharts(da15, x);
+                                    renderhistogram(da15, x)
+
+                                }
+                                if (x == 160) {
+                                    let da16 = dataArray.slice(151, x);
+                                    da16.unshift(headertwo);
+                                    newchartdivs(x);
+                                    rendercharts(da16, x);
+                                    renderhistogram(da16, x)
+
+                                }
+                                if (x == 170) {
+                                    let da17 = dataArray.slice(161, x);
+                                    da17.unshift(headertwo);
+                                    newchartdivs(x);
+                                    rendercharts(da17, x);
+                                    renderhistogram(da17, x)
+
+                                }
+                                if (x == 180) {
+                                    let da18 = dataArray.slice(171, x);
+                                    da18.unshift(headertwo);
+                                    newchartdivs(x);
+                                    rendercharts(da18, x);
+                                    renderhistogram(da18, x)
+
+                                }
+                                if (x == 190) {
+                                    let da19 = dataArray.slice(181, x);
+                                    da19.unshift(headertwo);
+                                    newchartdivs(x);
+                                    rendercharts(da19, x);
+                                    renderhistogram(da19, x)
+
+                                }
+                                if (x == 200) {
+                                    let da20 = dataArray.slice(191, x);
+                                    da20.unshift(headertwo);
+                                    newchartdivs(x);
+                                    rendercharts(da20, x);
+                                    renderhistogram(da20, x)
+
+                                }
+                                if (x == dataArrayLength - 1) {
+                                    let da21 = dataArray.slice(201, dataArrayLength);
+                                    da21.unshift(headertwo);
+                                    newchartdivs(x);
+                                    rendercharts(da21, x);
+                                    renderhistogram(da21, x);
+                                    console.log('da21', da21);
+                                    console.log('da21', x);
+                                }
+                            }
+
+                            function rendercharts(da, x) {
+                                // Google Charts - Bar Chart
+                                google.charts.load('current', { packages: ['corechart', 'bar'] });
+                                google.charts.setOnLoadCallback(drawBasic);
+
+                                function drawBasic() {
+                                    console.log('drawBasic', da);
+                                    var data = google.visualization.arrayToDataTable(da);
+
+                                    var options = {
+                                        title: "Population of Countires",
+                                        chartArea: { width: '100%' },
+                                        hAxis: {
+                                            title: 'Total Population',
+                                            minValue: 0
+                                        },
+                                        vAxis: {
+                                            title: 'Country'
+                                        }
+                                    };
+
+                                    var chart = new google.visualization.BarChart(document.getElementById('barchart-' + x));
+
+                                    chart.draw(data, options);
+                                }
+
+                            }
+
+                            function renderhistogram(da, x) {
+                                console.log('histo', da);
+                                // Google charts - Histograms
+
+                                google.charts.load("current", { packages: ["corechart"] });
+                                google.charts.setOnLoadCallback(drawChart);
+                                function drawChart() {
+                                    var data = google.visualization.arrayToDataTable(da);
+
+                                    var options = {
+                                        title: "Population of Countires",
+                                        legend: { position: 'none' },
+                                    };
+
+                                    var chart = new google.visualization.Histogram(document.getElementById('histochart-' + x));
+                                    chart.draw(data, options);
+                                }
+                            }
+                        }
+
+                    }
+                })
+                .catch(error => alert('Please Select a Country'));
+        });
 
         event.preventDefault();
     });
