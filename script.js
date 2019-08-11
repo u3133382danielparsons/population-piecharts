@@ -21,6 +21,8 @@ window.onload = function () {
     const spinspan = document.createElement('span');
     spinspan.classList.add('spinner-grow');
     spinspan.classList.add('ml-3');
+    var btnz = document.getElementById('btnz');
+    btnz.innerText = 'Submit';
     var btnone = document.getElementById('btnone');
     btnone.innerText = 'Submit';
     let btntwo = document.getElementById('btntwo');
@@ -28,9 +30,72 @@ window.onload = function () {
     let btnthree = document.getElementById('btnthree');
     btnthree.innerText = 'Click Here';
 
+    /* 1. COUNTRY POPULATIONS */
+
+    // FORM-ONE SUBMIT EVENT
+    const formz = document.getElementById('formz');
+    const c1id = document.getElementById("countriesOne");
+
+    formz.addEventListener("submit", function (event) {
+
+        const ulOne = document.getElementsByClassName("list-group-one")[0];
+
+        // Add Loading spinner to button
+        btnz.innerText = 'Loading...';
+        btnz.appendChild(spinspan);
+        btnz.classList.add('disabled');
+
+        // Change label text
+        document.getElementById('countriesOnelbl').innerText = 'Country';
+
+        // Remove list items
+        while (ulOne.firstChild) {
+            ulOne.removeChild(ulOne.firstChild);
+        }
+
+
+
+        // Get Value from select option
+        var cz = c1id.value;
+
+        // If both select inputs aren't given a value
+        if (cz == 'Choose a Country') {
+
+            bootbox.alert("Please select a country!", function (result) {
+                // window.location.reload();
+                // enable sumit button
+                btnz.innerText = 'submit';
+                btnz.classList.remove('disabled');
+
+            });
+        }
+
+        const urlz = `http://54.72.28.201:80/1.0/population/${cz}/${today}?format=json`;
+        // Get data for Population Totals
+        fetch(urlz)
+            .then(response => response.json())
+            .then(data => {
+                console.log(JSON.stringify(data));
+                for (let i of Object.keys(data)) {
+                    let populationOne = data.total_population.population;
+                    populationOne = populationOne.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    let liOne = document.createElement("li");
+                    ulOne.appendChild(liOne);
+                    liOne.classList.add("list-group-item");
+                    let c1f = cz.split("%20").join(" ");
+                    liOne.appendChild(document.createTextNode(`Total Population of ${c1f} is ${populationOne}`));
+                    // enable sumit button
+                    btnz.innerText = 'submit';
+                    btnz.classList.remove('disabled');
+                }
+
+
+            })
+            .catch(error => console.log('Please Select a Country'));
+        event.preventDefault();
+    });
+
     /* Yearly Populations by Country and Age */
-
-
 
     document.getElementById("currentyear").appendChild(document.createTextNode(yyyy)); // Add current year to subtitle
 
@@ -62,9 +127,7 @@ window.onload = function () {
 
 
         // If both select inputs aren't given a value
-        if (country == 'Country of Birth' || age == 'Age in Years') {
-            // if (bootbox.alert('')) { }
-            // window.location.reload();
+        if (country == 'Country' || age == 'Age in Years') {
 
             bootbox.confirm("Please select both a country and an age!", function (result) {
                 window.location.reload();
@@ -110,9 +173,6 @@ window.onload = function () {
 
                                 var pieyear = datayear[k];
 
-                                // var listtotal = totals[k];
-                                // console.log(listtotal);
-
 
                                 // Create div elements for each pie chart
                                 var newDiv = document.createElement("div");
@@ -122,7 +182,7 @@ window.onload = function () {
                                 pieCharts.appendChild(newDiv);
 
 
-                                function renderpiecharts(piearray, pieyear) {
+                                function renderpiecharts(piearray, pieyear, country) {
 
                                     let id = 'piechart-' + k;
                                     google.charts.load('current', { 'packages': ['corechart'] });
@@ -133,7 +193,7 @@ window.onload = function () {
                                         var data = google.visualization.arrayToDataTable(piearray);
 
                                         var options = {
-                                            title: pieyear,
+                                            title: country + ' ' + pieyear,
                                             is3D: true,
                                             sliceVisibilityThreshold: .2
                                         };
@@ -141,12 +201,13 @@ window.onload = function () {
                                         var chart = new google.visualization.PieChart(document.getElementById(id));
 
                                         chart.draw(data, options);
+
+                                        // enable sumit button
                                         btnone.innerText = 'submit';
                                         btnone.classList.remove('disabled');
                                     }
                                 }
-                                console.log(JSON.stringify(piearray));
-                                renderpiecharts(piearray, pieyear);
+                                renderpiecharts(piearray, pieyear, country);
 
                             }
 
@@ -156,7 +217,7 @@ window.onload = function () {
                     }
 
                 })
-                .catch(error => console.log('There is an error in the code, again!'));
+                .catch(error => console.log('Form did not submit!'));
         }
 
         event.preventDefault();
@@ -225,7 +286,6 @@ window.onload = function () {
                     }
                 }
                 if (c2 == 'Country of Birth' || a2 == 'Age in Years' || m2 == 'Month of Birth' || g2 == 'Choose Gender') {
-                    console.log(ultwo.firstChild);
                     ultwo.removeChild(ultwo.firstChild);
                     ultwo.removeChild(ultwo.firstChild);
                 }
@@ -240,9 +300,6 @@ window.onload = function () {
     });
 
     /* Population Totals - All Countries */
-
-    // Initialise arrays for bar and histogram charts
-
 
     // Header Info 
     var headertwo = ['Country', 'Population'];
@@ -281,7 +338,6 @@ window.onload = function () {
                         let datalength = dataArray.length;
 
                         if (countrieslength == datalength) {
-                            console.log(JSON.stringify(dataArray));
 
                             // Renable submit button
                             btnthree.innerText = 'submit';
@@ -482,8 +538,7 @@ window.onload = function () {
                                     newchartdivs(x);
                                     rendercharts(da21, x);
                                     renderhistogram(da21, x);
-                                    console.log('da21', da21);
-                                    console.log('da21', x);
+
                                 }
                             }
 
@@ -493,7 +548,6 @@ window.onload = function () {
                                 google.charts.setOnLoadCallback(drawBasic);
 
                                 function drawBasic() {
-                                    console.log('drawBasic', da);
                                     var data = google.visualization.arrayToDataTable(da);
 
                                     var options = {
@@ -516,7 +570,7 @@ window.onload = function () {
                             }
 
                             function renderhistogram(da, x) {
-                                console.log('histo', da);
+
                                 // Google charts - Histograms
 
                                 google.charts.load("current", { packages: ["corechart"] });
