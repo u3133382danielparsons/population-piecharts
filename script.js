@@ -75,7 +75,6 @@ window.onload = function () {
         fetch(urlz)
             .then(response => response.json())
             .then(data => {
-                console.log(JSON.stringify(data));
                 for (let i of Object.keys(data)) {
                     let populationOne = data.total_population.population;
                     populationOne = populationOne.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -109,7 +108,7 @@ window.onload = function () {
         }
 
         // Add Loading spinner to button
-        btnone.innerText = 'Loading...';
+        btnone.innerText = 'Please Wait ...';
         btnone.appendChild(spinspan);
         btnone.classList.add('disabled');
 
@@ -310,7 +309,7 @@ window.onload = function () {
 
 
         // Add Loading spinner to button
-        btnthree.innerText = 'Loading...';
+        btnthree.innerText = 'Please Wait ...';
         btnthree.appendChild(spinspan);
         btnthree.classList.add('disabled');
 
